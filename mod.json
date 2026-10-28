@@ -1,0 +1,100 @@
+{
+	"geode": "5.11.2",
+	"gd": {
+		"win": "2.2081",
+		"android": "2.2081",
+		"mac": "2.2081"
+	},
+	"id": "lilwc.predictive-input-buffer",
+	"name": "Predictive Input Buffer",
+	"version": "v1.0.0",
+	"developer": "lilWC",
+	"description": "Experimental input assistant: buffers clicks that would kill you and protects directional releases.",
+	"settings": {
+		"predictive-buffer": {
+			"type": "bool",
+			"name": "Predictive input buffer",
+			"description": "If the next frame would put you inside a hazard, hold the click until a safe frame inside the window.",
+			"default": true
+		},
+		"buffer-in-cube-mode": {
+			"type": "bool",
+			"name": "Buffer in ground modes (cube, ball, robot, spider)",
+			"description": "Off by default: delaying a jump in a gravity mode can make a required jump impossible to land. Flight modes (ship, UFO, wave, swing) are always buffered.",
+			"default": false
+		},
+		"window-size": {
+			"type": "int",
+			"name": "Buffer window (frames)",
+			"description": "How many frames ahead a click may be delayed on normal sections. One frame = one GJBaseGameLayer::update call.",
+			"default": 8,
+			"min": 1,
+			"max": 32
+		},
+		"extended-window-size": {
+			"type": "int",
+			"name": "Extended window (frames)",
+			"description": "Bigger window used on dense sections (when enough hazards are nearby).",
+			"default": 16,
+			"min": 1,
+			"max": 32
+		},
+		"density-threshold": {
+			"type": "int",
+			"name": "Density threshold",
+			"description": "Number of nearby hazards that switches the buffer from the base window to the extended window.",
+			"default": 12,
+			"min": 1,
+			"max": 100
+		},
+		"scan-radius": {
+			"type": "float",
+			"name": "Scan radius (units)",
+			"description": "Only hazards whose centre is within this distance of the player are considered by the predictor.",
+			"default": 200.0,
+			"min": 50.0,
+			"max": 400.0,
+			"control": {
+				"slider": true
+			}
+		},
+		"prediction-mode": {
+			"type": "string",
+			"name": "Prediction mode",
+			"description": "aabb = one linear extrapolation from current velocity (fast). trajectory = per-frame integration with gravity (slower, follows arcs better).",
+			"default": "aabb",
+			"one-of": [
+				"aabb",
+				"trajectory"
+			]
+		},
+		"humanization-chance": {
+			"type": "int",
+			"name": "Earliest-safe chance (%)",
+			"description": "Chance to pick the earliest safe frame. The rest of the time a random safe frame is used, to avoid identical input patterns.",
+			"default": 80,
+			"min": 0,
+			"max": 100
+		},
+		"release-protection": {
+			"type": "bool",
+			"name": "Directional release protection",
+			"description": "Delay releasing Left/Right while airborne in flying modes, to avoid dropping out of a wave or dash one tick too early.",
+			"default": true
+		},
+		"release-delay-ms": {
+			"type": "int",
+			"name": "Release delay (ms)",
+			"description": "How long a Left/Right release is held back. 0 disables the delay.",
+			"default": 20,
+			"min": 0,
+			"max": 200
+		},
+		"debug-logs": {
+			"type": "bool",
+			"name": "Debug logs",
+			"description": "Print per-click buffer decisions and a session summary (buffered clicks, average delay) to the Geode console.",
+			"default": false
+		}
+	}
+}
